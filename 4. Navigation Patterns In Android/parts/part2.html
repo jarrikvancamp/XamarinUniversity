@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <title>Exercise 2: Tab Navigation</title>
+    <link rel="stylesheet" type="text/css" href="./res/styles/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./res/styles/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="./res/styles/styles.css">
+</head>
+
+<body>
+    <!-- Use the same title as the StartHere -->
+    <header>Navigation Patterns</header>
+
+    <section id="main">
+
+        <h1 id="page-title"></h1>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Duration</h2>
+        <p>
+            20 minutes
+        </p>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <div class="hintblock">
+            <strong>Tip:</strong> If you are doing this exercise live in a session, make sure to make good use of the instructor,
+            they are online to answer any questions you have!
+        </div>
+        
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+        
+        <h2>Goals</h2>
+ 
+        <p>
+            The primary goal of this lab is to add Tab Navigation to a partially-written app.
+            You will be working on a <strong>Clock</strong> app that provides the three pages shown below: <em>current time</em>,
+            <em>stopwatch</em>, and <em>about</em>. The individual pages of the app are supplied; your job is to build the main
+            navigation structure. Notice the tab-strip along the top of the UI; that is the key thing you will be coding.
+        </p>
+
+        <img src="./res/images/TabNavigationCompleted.png" />
+
+        <h2>Required assets</h2>
+        <p>
+            The provided <strong>Resources</strong> folder for this exercise contains a subfolder named <strong>Start</strong>
+            that contains the app you will use.  There is also a <strong>Completed</strong> folder with a solution you
+            can use to check your work. Please make sure you have these folders before you begin.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h2>Challenge</h2>
+        <p>
+            You can use the high-level description here to work through the lab on your own. Alternatively, you can use
+            the instructions below if you would like step-by-step guidance.
+        </p>
+
+        <ol>
+            <li>Open the provided <strong>Clock</strong> solution.</li>
+            <li>In <strong>ClockAdapter.cs</strong>, complete the implementation of the <code>ClockAdapter</code> class.</li>
+            <li>Open <strong>Main.axml</strong> in source-code view and note that the UI contains a view pager.</li>
+            <li>Open <strong>MainActivity.cs</strong>. In the <code>OnCreate</code> method, use <code>FindViewById</code> to get a reference to the <code>ViewPager</code>.</li>
+            <li>Create a <code>ClockAdapter</code> instance.</li>
+            <li>Load the adapter into the <code>ViewPager</code>'s <code>Adapter</code> property.</li>
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Steps</h1>
+        <p>
+            Below are the step-by-step instructions to implement the exercise.
+        </p>
+
+        <h2>
+	        Examine the starter code
+        </h2>
+        
+        <p>
+            The supplied code implements the entire <strong>Clock</strong> app except for the Tab Navigation part.
+            Before you begin coding, the steps here will lead you through an examination of a few key parts of the provided code.
+        </p>
+        
+        <ol>
+            <li>
+                Open the <strong>Clock</strong> solution from the <strong>Lab.Start</strong> folder.
+            </li>
+            
+            <li>
+                Open <strong>Resources/layout/Time.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                Notice that the UI to display the current time is just a <code>TextView</code>. The string it displays
+                is updated every second from the code-behind.
+            </li>
+
+            <li>
+                Open <strong>TimeFragment.cs</strong>.
+            </li>
+
+            <li>
+                Note that the <code>TimeFragment</code> inherits from the support version of the <code>Fragment</code>
+                base class. The implementation uses a timer to update the UI once per second.
+            </li>
+
+            <li>
+                The other fragments (<code>StopwatchFragment</code> and <code>AboutFragment</code>) are similar. If you
+                have extra time, feel free to examine them; however, there is nothing there that you need to know to
+                continue with the exercise.
+            </li>
+
+            <li>
+                Notice that the <strong>Android Support Library v4</strong> component has been added to the project.
+                This contains the <code>ViewPager</code>, <code>PagerTabStrip</code>, <code>Fragment</code>, and
+                <code>FragmentPagerAdapter</code> classes that you will need to implement Tab Navigation.
+                It also contains the <code>FragmentActivity</code> class used as the base Activity
+                type so you inherit the support version of <code>FragmentManager</code>.
+            </li>
+
+            <li>
+                Open <strong>Resources/layout/Main.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                Notice the <code>ViewPager</code> used as the root layout. It has only one child: a <code>PagerTabStrip</code>
+                that displays the tabs across the top of the page.
+            </li>
+
+           </ol>
+
+        <h2>
+            Instantiate the adapter
+        </h2>
+
+        <p>
+            The view-pager pattern requires that you implement an <em>adapter</em> to provide Fragments to the
+            <code>ViewPager</code> and tab titles to the <code>PagerTabStrip</code>. Coding the adapter is part
+            of this lab exercise; however, you will first write the code in <code>MainActivity</code> that
+            instantiates the adapter object and loads it into the view-pager. Seeing how the adapter is used
+            should help you later when you need to implement it.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>Resources/layout/Main.axml</strong> in source-code view.
+            </li>
+
+            <li>
+                Note the <code>id</code> used on the <code>ViewPager</code>.
+            </li>
+
+            <li>
+                Open <strong>MainActivity.cs</strong>.
+            </li>
+
+            <li>
+                Use <code>FindViewById</code> to get a reference to the <code>ViewPager</code>.
+            </li>
+
+            <li>
+                Notice that <code>MainActivity</code> uses <code>FragmentActivity</code> as its base class.
+                This is so it will inherit a <code>SupportFragmentManager</code> property that returns
+                the support-library version of the <code>FragmentManager</code> class. This is needed because
+                the <code>ViewPager</code> requires that we give it an instance of the support fragment manager.
+            </li>
+
+            <li>
+                Look at the <code>ClockAdapter</code> constructor (see below). It needs three arguments: the first
+                is the support <code>FragmentManager</code> that you can get from <code>MainActivity</code>'s
+                <code>SupportFragmentManager</code> property. The other two are the collections of fragments
+                and strings that will make up your UI.
+<p><pre class="prettyprint">
+public ClockAdapter(Android.Support.V4.App.FragmentManager fm, Android.Support.V4.App.Fragment[] fragments, ICharSequence[] titles)
+{
+  // ...
+}
+</pre></p>
+			</li>
+
+	            <li>
+                Instantiate a <code>ClockAdapter</code> object. You will need to pass in the value from
+                your base's <code>SupportFragmentManager</code> property as well as the collections of
+                fragments and titles. The completed code is given below if you need it, hidden behind a button.
+            
+<p><a href="#" onclick="toggleCode(this,'CreateAdapter');return false;" class="uiitem">Show Code</a>
+<div class="indent-medium" id="CreateAdapter" style="display:none;">
+<pre class="prettyprint">
+var adapter = new ClockAdapter(base.SupportFragmentManager, fragments, titles);
+</pre></div></p>
+            </li>
+
+            <li>
+                Assign your adapter instance to the <code>ViewPager</code>'s <code>Adapter</code> property.
+            </li>
+
+        </ol>
+
+        <h2>
+            Code the adapter
+        </h2>
+
+        <p>
+            The last step is to implement the pager-adapter.
+        </p>
+
+        <ol>
+            <li>
+                Open <strong>ClockAdapter.cs</strong>.
+            </li>
+
+            <li>
+                Add fields to store the fragment collection and the title collection.
+                Modify the constructor to assign the corresponding parameters to your new fields.
+            </li>
+
+            <li>
+                Implement the <code>Count</code> property. This should return the number of
+                pages you need the <code>ViewPager</code> to display.
+            </li>
+
+            <li>
+                Implement the <code>GetItem</code> method. It must return the fragment at the
+                given position.
+            </li>
+
+            <li>
+                Implement the <code>GetPageTitleFormatted</code> method. It must return the title
+                for the tab at the given position.
+            </li>
+
+            <li>
+                Run the app to test your work. Try switching tabs both by tapping the titles and by swiping.
+            </li>
+
+        </ol>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <h1>Summary</h1>
+        <p>
+            In this exercise, you used the Support Library to code Tab Navigation. The two key classes were
+            <code>ViewPager</code> and <code>PagerTabStrip</code>. The <code>ViewPager</code> did most of the work
+            since it managed the Fragment transactions, supported the swipe gesture, and implemented the animated
+            page transitions. <code>PagerTabStrip</code> gave you low-profile tabs that let the user jump to
+            any page they need.
+        </p>
+
+        <!-- ---------------------------------------------------------------------------------------------------------------- -->
+
+        <div class="align-right">
+            <a href="../StartHere.html">Go Back</a>
+        </div>
+
+    </section>
+
+    <script src="./res/js/jquery.min.js"></script>
+    <script src="./res/js/prettify.js"></script>
+    <script src="./res/js/script.js"></script>
+
+    <footer>Copyright (C) 2016 Xamarin</footer>
+</body>
+</html>
